@@ -1,0 +1,14 @@
+Provides a way to split a views table row into two.
+In the table style settings, select a "Secondary row" option.
+
+So if a table looks like this:
+Name | Description | Edit link | Delete link
+selecting "Name" as the secondary row option for "Edit link" and "Description"
+as the secondary row option for the "Delete link" will render two rows:
+
+Name        | Description
+MyNode      | Sample description
+node/1/edit | node/1/delete
+
+As you can see, columns selected to render in the "secondary row" aren't
+rendered in the table header.
