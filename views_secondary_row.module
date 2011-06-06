@@ -19,7 +19,8 @@ function views_secondary_row_views_plugins() {
         'title' => t('Table with secondary rows'),
         'help' => t('Allows table rows to be breaken up into two.'),
         'handler' => 'views_secondary_row_plugin_style_table',
-        'theme' => 'views_view_table',
+        'theme' => 'views_secondary_row_view_table',
+        'theme file' => 'views_secondary_row.module',
         'uses row plugin' => FALSE,
         'uses row class' => TRUE,
         'uses fields' => TRUE,
@@ -114,7 +115,7 @@ function theme_views_secondary_row_style_plugin_table($variables) {
 /**
  * Display a view as a table style.
  */
-function views_secondary_row_preprocess_views_view_table(&$vars) {
+function template_preprocess_views_secondary_row_view_table(&$vars) {
   $view = $vars['view'];
   $options  = $view->style_plugin->options;
   $handler  = $view->style_plugin;
@@ -130,15 +131,19 @@ function views_secondary_row_preprocess_views_view_table(&$vars) {
   }
   // This is an ordinary table, no need to do anything else.
   if (!$has_secondary_row) {
+    template_preprocess_views_view_table($vars);
     return;
   }
 
-  // Reset the header and rows, so that the module can do its own thing.
-  $result = $vars['result'] = $vars['rows'];
-  $vars['header'] = array();
+  // We need the raw data for this grouping, which is passed in as $vars['rows'].
+  // However, the template also needs to use for the rendered fields.  We
+  // therefore swap the raw data out to a new variable and reset $vars['rows']
+  // so that it can get rebuilt.
+  // Store rows so that they may be used by further preprocess functions.
+  $result   = $vars['result'] = $vars['rows'];
   $vars['rows'] = array();
-  $vars['field_classes'] = array();
   $vars['field_attributes'] = array();
+  $vars['field_classes'] = array();
 
   $header = array();
   $columns  = $handler->sanitize_columns($options['columns'], $fields);
