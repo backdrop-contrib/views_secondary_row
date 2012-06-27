@@ -62,6 +62,10 @@ function theme_views_secondary_row_style_plugin_table($variables) {
       'align' => 'center',
     ),
     array(
+      'data' => t('Colspan'),
+      'align' => 'center',
+    ),
+    array(
       'data' => t('Sortable'),
       'align' => 'center',
     ),
@@ -82,6 +86,7 @@ function theme_views_secondary_row_style_plugin_table($variables) {
     $row[] = drupal_render($form['info'][$id]['align']);
     $row[] = drupal_render($form['info'][$id]['separator']);
     $row[] = drupal_render($form['info'][$id]['break']);
+    $row[] = drupal_render($form['info'][$id]['colspan']);
     if (!empty($form['info'][$id]['sortable'])) {
       $row[] = array(
         'data' => drupal_render($form['info'][$id]['sortable']),
@@ -105,7 +110,7 @@ function theme_views_secondary_row_style_plugin_table($variables) {
   }
 
   // Add the special 'None' row.
-  $rows[] = array(t('None'), '', '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])));
+  $rows[] = array(t('None'), '', '', '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])));
 
   $output .= theme('table', array('header' => $header, 'rows' => $rows));
   $output .= drupal_render_children($form);
@@ -243,7 +248,7 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
         $vars['field_classes'][$target_column][$num] .= $classes;
       }
       $vars['field_attributes'][$target_column][$num] = array();
-
+      $vars['field_attributes'][$target_column][$num]['colspan'] = $options['info'][$field]['colspan'];
       if (!empty($fields[$field]) && empty($fields[$field]->options['exclude'])) {
         $field_output = $renders[$old_num][$field];
         $element_type = $fields[$field]->element_type(TRUE, TRUE);

@@ -34,6 +34,11 @@ class views_secondary_row_plugin_style_table extends views_plugin_style_table {
         '#options' => $field_names,
         '#dependency' => array($id => array($field)),
       );
+      $form['info'][$field]['colspan'] = array(
+        '#type' => 'textfield',
+        '#default_value' => $this->options['info'][$field]['colspan'],
+        '#size' => 5,
+      );
     }
   }
 }
