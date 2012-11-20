@@ -30,13 +30,13 @@ class views_secondary_row_plugin_style_table extends views_plugin_style_table {
 
       $form['info'][$field]['break'] = array(
         '#type' => 'select',
-        '#default_value' => $this->options['info'][$field]['break'],
+        '#default_value' => isset($this->options['info'][$field]['break']) ? $this->options['info'][$field]['break'] : '',
         '#options' => $field_names,
         '#dependency' => array($id => array($field)),
       );
       $form['info'][$field]['colspan'] = array(
         '#type' => 'textfield',
-        '#default_value' => $this->options['info'][$field]['colspan'],
+        '#default_value' => isset($this->options['info'][$field]['colspan']) ? $this->options['info'][$field]['colspan'] : '',
         '#size' => 5,
       );
     }
