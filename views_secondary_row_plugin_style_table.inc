@@ -8,6 +8,7 @@
 
 class views_secondary_row_plugin_style_table extends views_plugin_style_table {
 
+/*
   function option_definition() {
     $options = parent::option_definition();
 
@@ -16,6 +17,7 @@ class views_secondary_row_plugin_style_table extends views_plugin_style_table {
 
     return $options;
   }
+*/
 
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
@@ -33,14 +35,14 @@ class views_secondary_row_plugin_style_table extends views_plugin_style_table {
 
       $form['info'][$field]['break'] = array(
         '#type' => 'select',
-        '#default_value' => $this->options['break'],
+        '#default_value' => isset($this->options['info'][$field]['break']) ? $this->options['info'][$field]['break'] : '',
         '#options' => $field_names,
         '#dependency' => array($id => array($field)),
       );
       $form['info'][$field]['colspan'] = array(
         '#type' => 'textfield',
         '#size' => 5,
-        '#default_value' => $this->options['colspan'],
+        '#default_value' => isset($this->options['info'][$field]['colspan']) ? $this->options['info'][$field]['colspan'] : '',
         '#dependency' => array($id => array($field)),
       );
     }
