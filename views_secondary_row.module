@@ -63,7 +63,11 @@ function theme_views_secondary_row_style_plugin_table($variables) {
       'align' => 'center',
     ),
     array(
-      'data' => t('Colspan'),
+      'data' => t('2nd row Separator'),
+      'align' => 'center',
+    ),
+    array(
+      'data' => t('2nd row Colspan'),
       'align' => 'center',
     ),
     array(
@@ -91,6 +95,7 @@ function theme_views_secondary_row_style_plugin_table($variables) {
     $row[] = drupal_render($form['info'][$id]['align']);
     $row[] = drupal_render($form['info'][$id]['separator']);
     $row[] = drupal_render($form['info'][$id]['break']);
+    $row[] = drupal_render($form['info'][$id]['separator2']);
     $row[] = drupal_render($form['info'][$id]['colspan']);
     if (!empty($form['info'][$id]['sortable'])) {
       $row[] = array(
@@ -119,7 +124,7 @@ function theme_views_secondary_row_style_plugin_table($variables) {
   }
 
   // Add the special 'None' row.
-  $rows[] = array(t('None'), '', '', '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])), '');
+  $rows[] = array(t('None'), '', '', '', '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])), '');
 
   $output .= theme('table', array('header' => $header, 'rows' => $rows));
   $output .= drupal_render_children($form);
@@ -290,6 +295,12 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
 
         // Place the field into the column, along with an optional separator.
         if (!empty($vars['rows'][$num][$target_column])) {
+          if($num == $secondary_row_num) {
+            if (!empty($options['info'][$target_column]['separator2'])) {
+              $vars['rows'][$num][$target_column] .= filter_xss_admin($options['info'][$target_column]['separator2']);
+            }
+          }
+          else
           if (!empty($options['info'][$target_column]['separator'])) {
             $vars['rows'][$num][$target_column] .= filter_xss_admin($options['info'][$target_column]['separator']);
           }
