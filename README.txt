@@ -14,7 +14,9 @@ As you can see, columns selected to render in the "secondary row" aren't
 rendered in the table header.
 
 Most code is adapted from the following Views files:
-- views\plugins\views_plugin_style_table.inc
-- views\theme\views-view-table.tpl.php
-- views\theme\theme.inc
-- views\includes\admin.inc
+  views file                                    vsr file                               vsr function
+  ----------                                    --------                               ------------
+- views\plugins\views_plugin_style_table.inc    views_secondary_row_plugin_style_table.inc
+- views\theme\views-view-table.tpl.php          views-secondary-row-view-table.tpl.php
+- views\theme\theme.inc                         views_secondary_row.module             template_preprocess_views_secondary_row_view_table()
+- views\includes\admin.inc                      views_secondary_row.module             theme_views_secondary_row_style_plugin_table()

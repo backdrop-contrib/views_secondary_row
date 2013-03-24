@@ -90,7 +90,7 @@ function theme_views_secondary_row_style_plugin_table($variables) {
   $rows = array();
   foreach (element_children($form['columns']) as $id) {
     $row = array();
-    $row[] = drupal_render($form['info'][$id]['name']);
+    $row[] = check_plain(drupal_render($form['info'][$id]['name']));
     $row[] = drupal_render($form['columns'][$id]);
     $row[] = drupal_render($form['info'][$id]['align']);
     $row[] = drupal_render($form['info'][$id]['separator']);
@@ -379,7 +379,16 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
   }
   $vars['classes_array'][] = 'cols-'. count($vars['header']);
 
+  // Add the summary to the list if set.
   if (!empty($handler->options['summary'])) {
-    $vars['attributes_array'] = array('summary' => $handler->options['summary']);
+    $vars['attributes_array'] = array('summary' => filter_xss_admin($handler->options['summary']));
+  }
+
+  // Add the caption to the list if set.
+  if (!empty($handler->options['caption'])) {
+    $vars['caption'] = filter_xss_admin($handler->options['caption']);
+  }
+  else {
+    $vars['caption'] = '';
   }
 }
