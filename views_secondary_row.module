@@ -136,7 +136,7 @@ function theme_views_secondary_row_style_plugin_table($variables) {
  * Copied from views\theme\theme.inc.
  */
 function template_preprocess_views_secondary_row_view_table(&$vars) {
-  $view     = $vars['view'];
+  $view = $vars['view'];
 
   // Check if secondary rows are specified. If not, just call the default 'table' preprocessing.
   $options  = $view->style_plugin->options;
@@ -279,7 +279,9 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
         $vars['field_classes'][$target_column][$num] .= $classes;
       }
       $vars['field_attributes'][$target_column][$num] = array();
-      $vars['field_attributes'][$target_column][$num]['colspan'] = $options['info'][$field]['colspan'];
+      if (!empty($options['info'][$field]['colspan'])) {
+        $vars['field_attributes'][$target_column][$num]['colspan'] = $options['info'][$field]['colspan'];
+      }
 
       if (!empty($fields[$field]) && empty($fields[$field]->options['exclude'])) {
         $field_output = $renders[$old_num][$field];
