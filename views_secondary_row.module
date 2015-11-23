@@ -46,7 +46,9 @@ function views_secondary_row_theme() {
 
 /**
  * Theme the admin form for the table style plugin
+ *
  * Copied from views\includes\admin.inc, and 2 columns inserted.
+ * Version history: Aligned with Views 7.x-3.6, not changed in 3.13
  */
 function theme_views_secondary_row_style_plugin_table($variables) {
   $form = $variables['form'];
@@ -134,9 +136,10 @@ function theme_views_secondary_row_style_plugin_table($variables) {
 /**
  * Display a view as a table style.
  * Copied from views\theme\theme.inc.
+ * Version history: Aligned with Views 7.x-3.6, not changed in 3.13
  */
 function template_preprocess_views_secondary_row_view_table(&$vars) {
-  $view = $vars['view'];
+  $view     = $vars['view'];
 
   // Check if secondary rows are specified. If not, just call the default 'table' preprocessing.
   $options  = $view->style_plugin->options;
