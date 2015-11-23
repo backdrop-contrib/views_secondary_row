@@ -358,7 +358,9 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
   foreach ($vars['rows'] as $num => $row) {
     $vars['row_classes'][$num] = array();
     if ($row_class_special) {
-      $vars['row_classes'][$num][] = ($count++ % 2 == 0) ? 'odd' : 'even';
+      // Views secondary row: give both lines the same class.
+      //$vars['row_classes'][$num][] = ($count++ % 2 == 0) ? 'odd' : 'even';
+      $vars['row_classes'][$num][] = (($count++ / 2) % 2 == 0) ? 'odd' : 'even';
     }
     if ($row_class = $handler->get_row_class($num)) {
       $vars['row_classes'][$num][] = $row_class;
