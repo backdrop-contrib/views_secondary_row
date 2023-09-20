@@ -10,9 +10,10 @@ function views_secondary_row_views_api() {
 }
 
 /**
- * Implements hook_views_plugins
+ * Implements hook_views_plugins().
  */
 function views_secondary_row_views_plugins() {
+  $module_path = backdrop_get_path('module', 'views_secondary_row');
   $plugins = array(
     'style' => array(
       'break_row' => array(
@@ -20,6 +21,7 @@ function views_secondary_row_views_plugins() {
         'help' => t('Allows table rows to be breaken up into two.'),
         'handler' => 'views_secondary_row_plugin_style_table',
         'theme' => 'views_secondary_row_view_table',
+        'theme path' => $module_path,
         'theme file' => 'views_secondary_row.module',
         'uses row plugin' => FALSE,
         'uses row class' => TRUE,
@@ -44,6 +46,17 @@ function views_secondary_row_theme() {
   return $theme_info;
 }
 
+
+/**
+ * Implements hook_autoload_info().
+ */
+function views_secondary_row_autoload_info() {
+  return array(
+    'views_secondary_row_plugin_style_table' => 'views_secondary_row_plugin_style_table.inc',
+  );
+}
+
+
 /**
  * Theme the admin form for the table style plugin
  *
@@ -53,7 +66,7 @@ function views_secondary_row_theme() {
 function theme_views_secondary_row_style_plugin_table($variables) {
   $form = $variables['form'];
 
-  $output = drupal_render($form['description_markup']);
+  $output = backdrop_render($form['description_markup']);
 
   $header = array(
     t('Field'),
@@ -92,24 +105,24 @@ function theme_views_secondary_row_style_plugin_table($variables) {
   $rows = array();
   foreach (element_children($form['columns']) as $id) {
     $row = array();
-    $row[] = check_plain(drupal_render($form['info'][$id]['name']));
-    $row[] = drupal_render($form['columns'][$id]);
-    $row[] = drupal_render($form['info'][$id]['align']);
-    $row[] = drupal_render($form['info'][$id]['separator']);
-    $row[] = drupal_render($form['info'][$id]['break']);
-    $row[] = drupal_render($form['info'][$id]['separator2']);
-    $row[] = drupal_render($form['info'][$id]['colspan']);
+    $row[] = check_plain(backdrop_render($form['info'][$id]['name']));
+    $row[] = backdrop_render($form['columns'][$id]);
+    $row[] = backdrop_render($form['info'][$id]['align']);
+    $row[] = backdrop_render($form['info'][$id]['separator']);
+    $row[] = backdrop_render($form['info'][$id]['break']);
+    $row[] = backdrop_render($form['info'][$id]['separator2']);
+    $row[] = backdrop_render($form['info'][$id]['colspan']);
     if (!empty($form['info'][$id]['sortable'])) {
       $row[] = array(
-        'data' => drupal_render($form['info'][$id]['sortable']),
+        'data' => backdrop_render($form['info'][$id]['sortable']),
         'align' => 'center',
       );
       $row[] = array(
-        'data' => drupal_render($form['info'][$id]['default_sort_order']),
+        'data' => backdrop_render($form['info'][$id]['default_sort_order']),
         'align' => 'center',
       );
       $row[] = array(
-        'data' => drupal_render($form['default'][$id]),
+        'data' => backdrop_render($form['default'][$id]),
         'align' => 'center',
       );
     }
@@ -119,17 +132,20 @@ function theme_views_secondary_row_style_plugin_table($variables) {
       $row[] = '';
     }
     $row[] = array(
-      'data' => drupal_render($form['info'][$id]['empty_column']),
+      'data' => backdrop_render($form['info'][$id]['empty_column']),
       'align' => 'center',
     );
     $rows[] = $row;
   }
 
   // Add the special 'None' row.
-  $rows[] = array(t('None'), '', '', '', '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])), '');
+  $rows[] = array(t('None'), '', '', '', '', '', '', '', '', array(
+      'align' => 'center',
+      'data' => backdrop_render($form['default'][-1]),
+    ), '');
 
   $output .= theme('table', array('header' => $header, 'rows' => $rows));
-  $output .= drupal_render_children($form);
+  $output .= backdrop_render_children($form);
   return $output;
 }
 
@@ -188,7 +204,7 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
   foreach ($columns as $field => $column) {
     // Create a second variable so we can easily find what fields we have and what the
     // CSS classes should be.
-    $vars['fields'][$field] = drupal_clean_css_identifier($field);
+    $vars['fields'][$field] = backdrop_clean_css_identifier($field);
     if ($active == $field) {
       $vars['fields'][$field] .= ' active';
     }
@@ -235,7 +251,7 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
       }
       // Add a CSS align class to each field if one was set
       if (!empty($options['info'][$field]['align'])) {
-        $vars['header_classes'][$field] .= ' ' . drupal_clean_css_identifier($options['info'][$field]['align']);
+        $vars['header_classes'][$field] .= ' ' . backdrop_clean_css_identifier($options['info'][$field]['align']);
       }
 
       // Add a header label wrapper if one was selected.
@@ -250,7 +266,7 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
 
     // Add a CSS align class to each field if one was set
     if (!empty($options['info'][$field]['align'])) {
-      $vars['fields'][$field] .= ' ' . drupal_clean_css_identifier($options['info'][$field]['align']);
+      $vars['fields'][$field] .= ' ' . backdrop_clean_css_identifier($options['info'][$field]['align']);
     }
 
     // Render each field into its appropriate column.
@@ -300,13 +316,12 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
 
         // Place the field into the column, along with an optional separator.
         if (!empty($vars['rows'][$num][$target_column])) {
-          if($num == $secondary_row_num) {
+          if ($num == $secondary_row_num) {
             if (!empty($options['info'][$target_column]['separator2'])) {
               $vars['rows'][$num][$target_column] .= filter_xss_admin($options['info'][$target_column]['separator2']);
             }
           }
-          else
-          if (!empty($options['info'][$target_column]['separator'])) {
+          else if (!empty($options['info'][$target_column]['separator'])) {
             $vars['rows'][$num][$target_column] .= filter_xss_admin($options['info'][$target_column]['separator']);
           }
         }
@@ -342,9 +357,9 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
     }
     $ordered = array();
     foreach ($columns as $field => $column) {
-        if (isset($row[$column])) {
-          $ordered[$column] = $row[$column];
-        }
+      if (isset($row[$column])) {
+        $ordered[$column] = $row[$column];
+      }
     }
     $vars['rows'][$num] = $ordered;
   }
@@ -381,10 +396,10 @@ function template_preprocess_views_secondary_row_view_table(&$vars) {
   }
 
   if (!empty($options['sticky'])) {
-    drupal_add_js('misc/tableheader.js');
+    backdrop_add_js('misc/tableheader.js');
     $vars['classes_array'][] = "sticky-enabled";
   }
-  $vars['classes_array'][] = 'cols-'. count($vars['header']);
+  $vars['classes_array'][] = 'cols-' . count($vars['header']);
 
   // Add the summary to the list if set.
   if (!empty($handler->options['summary'])) {

@@ -1,7 +1,7 @@
 name = Views Secondary Row
 description = Provides a table style allowing fields to be broken into a secondary row.
-core = 7.x
+backdrop = 1.x
+type = module
 dependencies[] = views
 package = Views
 
-files[] = views_secondary_row_plugin_style_table.inc
