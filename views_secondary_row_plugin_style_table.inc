@@ -2,23 +2,23 @@
 
 /**
  * @file
- * Contains this module's extended table style plugin, 
+ * Contains this module's extended table style plugin,
  * which allows rows to be broken into two.
  */
 
 class views_secondary_row_plugin_style_table extends views_plugin_style_table {
 
-/*
-  function option_definition() {
-    $options = parent::option_definition();
+  /*
+   function option_definition() {
+   $options = parent::option_definition();
 
-    $options['break'] = array('default' => '');
-    $options['separator2'] = array('default' => '');
-    $options['colspan'] = array('default' => '');
+   $options['break'] = array('default' => '');
+   $options['separator2'] = array('default' => '');
+   $options['colspan'] = array('default' => '');
 
-    return $options;
-  }
-*/
+   return $options;
+   }
+   */
 
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
